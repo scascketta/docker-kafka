@@ -71,5 +71,17 @@ if [ ! -z "$AUTO_CREATE_TOPICS" ]; then
     echo "auto.create.topics.enable=$AUTO_CREATE_TOPICS" >> $KAFKA_HOME/config/server.properties
 fi
 
+# Configure broker ID
+if [ ! -z "$BROKER_ID" ]; then
+    echo "Kafka broker ID: $BROKER_ID"
+    sed -r -i "s/(broker.id)=(.*)/\1=$BROKER_ID/g" $KAFKA_HOME/config/server.properties
+fi
+
+# Configure ZooKeeper connection string
+if [ ! -z "$ZK_CONNECT" ]; then
+    echo "Zookeeper hosts to connect to: $ZK_CONNECT"
+    sed -r -i "s/(zookeeper.connect)=(.*)/\1=$ZK_CONNECT/g" $KAFKA_HOME/config/server.properties
+fi
+
 # Run Kafka
 $KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties
